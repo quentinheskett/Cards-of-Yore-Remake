@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://cktjmvpmwgdu3"]
 
 [ext_resource type="Script" path="res://scripts/card_manager.gd" id="1_ynpq5"]
-[ext_resource type="PackedScene" uid="uid://dfbjjfv51rxe2" path="res://scenes/card.tscn" id="2_5b5xm"]
+[ext_resource type="Script" path="res://scripts/player_hand.gd" id="3_3a25e"]
 [ext_resource type="PackedScene" uid="uid://bi0knblfmo28p" path="res://scenes/card_slot.tscn" id="3_wso7r"]
 
 [sub_resource type="GDScript" id="GDScript_e4thw"]
@@ -17,11 +17,8 @@ script = SubResource("GDScript_e4thw")
 [node name="CardManager" type="Node2D" parent="."]
 script = ExtResource("1_ynpq5")
 
-[node name="Card" parent="CardManager" instance=ExtResource("2_5b5xm")]
-position = Vector2(285, 367)
-
-[node name="Card2" parent="CardManager" instance=ExtResource("2_5b5xm")]
-position = Vector2(372, 366)
-
 [node name="CardSlot" parent="." instance=ExtResource("3_wso7r")]
-position = Vector2(106, 371)
+position = Vector2(235, 318)
+
+[node name="PlayerHand" type="Node2D" parent="."]
+script = ExtResource("3_3a25e")
