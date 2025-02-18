@@ -7,7 +7,7 @@
 size = Vector2(64, 96)
 
 [node name="Deck" type="Node2D"]
-position = Vector2(50, 450)
+position = Vector2(50, 1000)
 script = ExtResource("1_5fng3")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

@@ -1,7 +1,7 @@
 extends Node2D
 
 const CARD_WIDTH = 80
-const HAND_Y_POSITION = 450
+const HAND_Y_POSITION = 1000
 const DEFAULT_CARD_MOVE_SPEED = 0.1
 
 var player_hand = []
