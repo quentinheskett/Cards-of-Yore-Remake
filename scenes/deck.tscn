@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bx51pl05xtw6c" path="res://assets/sprites/deck_placeholder.png" id="2_v0f4w"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ufy3u"]
-size = Vector2(64, 96)
+size = Vector2(84, 128)
 
 [node name="Deck" type="Node2D"]
 position = Vector2(50, 1000)
