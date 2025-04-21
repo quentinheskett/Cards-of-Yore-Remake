@@ -61,6 +61,22 @@ z_index = -3
 position = Vector2(720, 828)
 script = ExtResource("6_jh4bi")
 
+[node name="CardSlot4" parent="CardSlots" instance=ExtResource("3_wso7r")]
+z_index = -3
+position = Vector2(630, 540)
+
+[node name="CardSlot5" parent="CardSlots" instance=ExtResource("3_wso7r")]
+z_index = -3
+position = Vector2(630, 668)
+
+[node name="CardSlot6" parent="CardSlots" instance=ExtResource("3_wso7r")]
+z_index = -3
+position = Vector2(810, 540)
+
+[node name="CardSlot7" parent="CardSlots" instance=ExtResource("3_wso7r")]
+z_index = -3
+position = Vector2(810, 668)
+
 [node name="OpponentCardSlot1" parent="CardSlots" instance=ExtResource("7_u1hj3")]
 position = Vector2(720, 112)
 
@@ -69,6 +85,18 @@ position = Vector2(720, 272)
 
 [node name="OpponentCardSlot3" parent="CardSlots" instance=ExtResource("7_u1hj3")]
 position = Vector2(720, 400)
+
+[node name="OpponentCardSlot4" parent="CardSlots" instance=ExtResource("7_u1hj3")]
+position = Vector2(630, 272)
+
+[node name="OpponentCardSlot5" parent="CardSlots" instance=ExtResource("7_u1hj3")]
+position = Vector2(630, 400)
+
+[node name="OpponentCardSlot6" parent="CardSlots" instance=ExtResource("7_u1hj3")]
+position = Vector2(810, 272)
+
+[node name="OpponentCardSlot7" parent="CardSlots" instance=ExtResource("7_u1hj3")]
+position = Vector2(810, 400)
 
 [node name="EndTurnButton" type="Button" parent="."]
 offset_left = 164.0

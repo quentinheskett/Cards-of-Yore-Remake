@@ -15,6 +15,10 @@ func _ready() -> void:
 	battle_timer.wait_time = 1.0
 	empty_basic_card_slots.append($"../CardSlots/OpponentCardSlot2")
 	empty_basic_card_slots.append($"../CardSlots/OpponentCardSlot3")
+	empty_basic_card_slots.append($"../CardSlots/OpponentCardSlot4")
+	empty_basic_card_slots.append($"../CardSlots/OpponentCardSlot5")
+	empty_basic_card_slots.append($"../CardSlots/OpponentCardSlot6")
+	empty_basic_card_slots.append($"../CardSlots/OpponentCardSlot7")
 
 func _on_end_turn_button_pressed() -> void:
 	opponent_turn()
