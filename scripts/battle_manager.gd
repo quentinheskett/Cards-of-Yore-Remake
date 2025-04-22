@@ -113,19 +113,33 @@ func attack(attacking_card, defending_card, attacker):
 	await wait(1.0)
 	attacking_card.z_index = 0
 	
+	var card_was_destroyed = false
+	
 	# destroy dead cards
 	if attacking_card.health == 0:
+		card_was_destroyed = true
 		destroy_card(attacking_card, attacker)
 	if defending_card.health == 0:
+		card_was_destroyed = true
 		if attacker == "Player":
 			destroy_card(attacking_card, "Opponent")
 		else:
 			destroy_card(attacking_card, "Player")
 		
+	if card_was_destroyed:
+		await wait(1.0)
+		
 func destroy_card(card, card_owner):
 	# remove card from field
 	# update all containers
-	pass
+	var new_pos
+	if card_owner == "Player":
+		new_pos = $"../PlayerDiscard".position
+	else:
+		new_pos = $"../OpponentDiscard".position
+	
+	var tween = get_tree().create_tween()
+	tween.tween_property(card, "position", new_pos, CARD_MOVE_SPEED)
 
 func try_play_card():
 	# play a card

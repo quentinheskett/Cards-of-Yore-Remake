@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cktjmvpmwgdu3"]
+[gd_scene load_steps=14 format=3 uid="uid://cktjmvpmwgdu3"]
 
 [ext_resource type="Script" path="res://scripts/card_manager.gd" id="1_ynpq5"]
 [ext_resource type="Script" path="res://scripts/player_hand.gd" id="3_3a25e"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" path="res://scripts/input_manager.gd" id="6_yn7u6"]
 [ext_resource type="PackedScene" uid="uid://bk874mcyuglc5" path="res://scenes/opponent_card_slot.tscn" id="7_u1hj3"]
 [ext_resource type="Script" path="res://scripts/battle_manager.gd" id="9_yl1kb"]
+[ext_resource type="Texture2D" uid="uid://caljpd0kqoqas" path="res://assets/sprites/card_holder.png" id="12_2p34d"]
 
 [sub_resource type="GDScript" id="GDScript_e4thw"]
 script/source = "extends Node2D
@@ -125,5 +126,17 @@ offset_right = 662.0
 offset_bottom = 126.0
 scale = Vector2(2, 2)
 text = "0"
+
+[node name="PlayerDiscard" type="Node2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="PlayerDiscard"]
+position = Vector2(1300, 900)
+texture = ExtResource("12_2p34d")
+
+[node name="OpponentDiscard" type="Node2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="OpponentDiscard"]
+position = Vector2(1300, 900)
+texture = ExtResource("12_2p34d")
 
 [connection signal="pressed" from="EndTurnButton" to="BattleManager" method="_on_end_turn_button_pressed"]
