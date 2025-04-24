@@ -10,6 +10,7 @@ var screen_size
 var is_hovering_on_card
 var player_hand_reference
 var played_basic_card_this_turn
+var selected_basic
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -23,11 +24,36 @@ func _process(_delta: float) -> void:
 		var mouse_pos = get_global_mouse_position()
 		card_being_dragged.position = Vector2(clamp(mouse_pos.x, 0, screen_size.x), 
 			clamp(mouse_pos.y, 0, screen_size.y))
+			
+func card_clicked(card):
+	if card.card_in_slot:
+		if $"../BattleManager".is_opponent_turn == false and $"../BattleManager".player_is_attacking == false:
+			if card not in $"../BattleManager".player_cards_attacked_this_turn:
+				if $"../BattleManager".opponent_cards_on_battlefield.size() == 0:
+					$"../BattleManager".direct_attack(card, "Player")
+					return
+				else:
+					select_card_for_battle(card)
+	else:
+		start_drag(card)
 
 func start_drag(card):
 	card_being_dragged = card
 	card.scale = Vector2(1, 1)
 	
+func select_card_for_battle(card):
+	if selected_basic:
+		# card already selected
+		if selected_basic == card:
+			card.position.y += 20
+			selected_basic = null
+		else:
+			card.position.y += 20
+			selected_basic = card
+			card.position.y -= 20
+	else:
+		selected_basic = card
+		card.position.y -= 20
 	
 func finish_drag():
 	card_being_dragged.scale = Vector2(1.05, 1.05)
@@ -42,14 +68,19 @@ func finish_drag():
 				is_hovering_on_card = false
 				player_hand_reference.remove_card_from_hand(card_being_dragged)
 				card_being_dragged.position = card_slot_found.position
-				card_being_dragged.get_node("Area2D/CollisionShape2D").disabled = true
 				card_slot_found.card_in_slot = true
+				card_slot_found.get_node("Area2D/CollisionShape2D").disabled = true
 				$"../BattleManager".player_cards_on_battlefield.append(card_being_dragged)
 				card_being_dragged.card_in_slot = card_slot_found
 				card_being_dragged = null
 				return
 	player_hand_reference.add_card_to_hand(card_being_dragged, DEFAULT_CARD_MOVE_SPEED)
 	card_being_dragged = null
+	
+func unselect_selected_basic():
+	if selected_basic:
+		selected_basic.position.y += 20
+		selected_basic = null
 
 func connect_card_signals(card):
 	card.connect("hovered", on_hovered_over_card)
@@ -60,18 +91,21 @@ func on_left_click_released():
 		finish_drag()
 	
 func on_hovered_over_card(card):
+	if card.card_in_slot:
+		return
 	if !is_hovering_on_card:
 		is_hovering_on_card = true
 		highlight_card(card, true)
 
 func on_hovered_off_card(card):
-	if !card.card_in_slot && !card_being_dragged:
-		highlight_card(card, false)
-		var new_card_hovered = check_for_card()
-		if new_card_hovered:
-			highlight_card(new_card_hovered, true)
-		else:
-			is_hovering_on_card = false
+	if !card.defeated:
+		if !card.card_in_slot && !card_being_dragged:
+			highlight_card(card, false)
+			var new_card_hovered = check_for_card()
+			if new_card_hovered:
+				highlight_card(new_card_hovered, true)
+			else:
+				is_hovering_on_card = false
 
 func highlight_card(card, hovered):
 	if hovered:

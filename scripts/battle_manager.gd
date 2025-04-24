@@ -9,8 +9,11 @@ var battle_timer
 var empty_basic_card_slots = []
 var opponent_cards_on_battlefield = []
 var player_cards_on_battlefield = []
+var player_cards_attacked_this_turn = []
 var player_health
 var opponent_health
+var is_opponent_turn = false
+var player_is_attacking = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -30,6 +33,9 @@ func _ready() -> void:
 	$"../OpponentHealth".text = str(opponent_health)
 
 func _on_end_turn_button_pressed() -> void:
+	is_opponent_turn = true
+	$"../CardManager".unselect_selected_basic()
+	player_cards_attacked_this_turn = []
 	opponent_turn()
 	
 	
@@ -69,7 +75,10 @@ func direct_attack(attacking_card, attacker):
 	if attacker == "Opponent":
 		new_pos_y = 1080
 	else:
+		player_is_attacking = true
+		$"../EndTurnButton".disabled = true
 		new_pos_y = 0
+		player_cards_attacked_this_turn.append(attacking_card)
 	
 	var new_pos = Vector2(attacking_card.position.x, new_pos_y)
 	
@@ -94,8 +103,17 @@ func direct_attack(attacking_card, attacker):
 	attacking_card.z_index = 0
 	await wait(1.0)
 	
+	if attacker == "Player":
+		player_is_attacking = false
+		$"../EndTurnButton".disabled = false
+	
 	
 func attack(attacking_card, defending_card, attacker):
+	if attacker == "Player":
+		$"../EndTurnButton".disabled = true
+		player_is_attacking = true
+		player_cards_attacked_this_turn.append(attacking_card)
+		$"../CardManager".selected_basic = null
 	attacking_card.z_index = 5
 	var new_pos = Vector2(defending_card.position.x, defending_card.position.y + BATTLE_POS_OFFSET)
 	var tween = get_tree().create_tween()
@@ -122,24 +140,45 @@ func attack(attacking_card, defending_card, attacker):
 	if defending_card.health == 0:
 		card_was_destroyed = true
 		if attacker == "Player":
-			destroy_card(attacking_card, "Opponent")
+			destroy_card(defending_card, "Opponent")
 		else:
-			destroy_card(attacking_card, "Player")
+			destroy_card(defending_card, "Player")
 		
 	if card_was_destroyed:
 		await wait(1.0)
+		
+	if attacker == "Player":
+		$"../EndTurnButton".disabled = false
+		player_is_attacking = false
 		
 func destroy_card(card, card_owner):
 	# remove card from field
 	# update all containers
 	var new_pos
 	if card_owner == "Player":
+		card.defeated = true
+		card.get_node("Area2D/CollisionShape2D").disabled = true
 		new_pos = $"../PlayerDiscard".position
+		if card in player_cards_on_battlefield:
+			player_cards_on_battlefield.erase(card)
+		card.card_in_slot.get_node("Area2D/CollisionShape2D").disabled = false
 	else:
 		new_pos = $"../OpponentDiscard".position
+		if card in opponent_cards_on_battlefield:
+			opponent_cards_on_battlefield.erase(card)
+	
+	card.card_in_slot.card_in_slot = false
+	card.card_in_slot = null
 	
 	var tween = get_tree().create_tween()
 	tween.tween_property(card, "position", new_pos, CARD_MOVE_SPEED)
+	
+func enemy_card_selected(defending_card):
+	var attacking_card = $"../CardManager".selected_basic
+	if attacking_card and defending_card in opponent_cards_on_battlefield and !player_is_attacking:
+		$"../CardManager".selected_basic = null
+		attack(attacking_card, defending_card, "Player")
+		
 
 func try_play_card():
 	# play a card
@@ -168,6 +207,8 @@ func try_play_card():
 	
 	await wait(1.0)
 	
+
+	
 func wait(wait_time):
 	battle_timer.wait_time = wait_time
 	battle_timer.start()
@@ -177,5 +218,6 @@ func end_opponent_turn():
 	# reset player deck draw and turn
 	$"../Deck".reset_draw()
 	$"../CardManager".reset_played_basic()
+	is_opponent_turn = false
 	$"../EndTurnButton".disabled = false
 	$"../EndTurnButton".visible = true

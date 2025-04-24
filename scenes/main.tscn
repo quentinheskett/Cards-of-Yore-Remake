@@ -128,12 +128,14 @@ scale = Vector2(2, 2)
 text = "0"
 
 [node name="PlayerDiscard" type="Node2D" parent="."]
+position = Vector2(1300, 900)
 
 [node name="Sprite2D" type="Sprite2D" parent="PlayerDiscard"]
 position = Vector2(1300, 900)
 texture = ExtResource("12_2p34d")
 
 [node name="OpponentDiscard" type="Node2D" parent="."]
+position = Vector2(1300, 900)
 
 [node name="Sprite2D" type="Sprite2D" parent="OpponentDiscard"]
 position = Vector2(1300, 900)
